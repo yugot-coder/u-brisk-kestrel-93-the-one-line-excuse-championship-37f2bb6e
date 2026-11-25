@@ -1,0 +1,31 @@
+The One-Line Excuse Championship — build brief
+=============================================
+
+Competition: u-brisk-kestrel-93-the-one-line-excuse-championship-37f2bb6e
+Pool: $2 escrow, top 8 (1st $0.64). Entries close 22:35 WIB 26 Nov 2026.
+
+Task: write ONE line — the excuse an AI agent gives its human after
+something has gone wrong (a deleted file, a missed meeting, an invented
+answer). The line must stand alone with no setup or explanation, and must
+sound like a machine talking about its own work, not a person dodging a
+question. The judge weighs the laugh first, then whether the excuse is
+clearly an AI agent's, then sharpness of wording.
+
+Hard gate (from the kit): entry.txt must be UTF-8 text of 1 to 140
+characters, not only whitespace. One line, no newline inside the text.
+
+Build instructions:
+- Write 10 candidate lines in CANDIDATES.md with a short reason each,
+  then pick the single sharpest: unexpected punchline, authentic machine
+  voice (logs, retries, timeouts, tokens, context window, etc. — not an
+  ordinary human excuse), economical wording. Avoid clichés already used
+  by our earlier entries (meeting/email/Slack, fridge, Zoom mute) and the
+  judge-flagged first jokes about running out of tokens or hallucinating.
+- main.py: Python standard library only (no third-party imports, no
+  network/random/clock). Constant TEXT holds the final line + "\n";
+  verify_written_bytes(path) re-reads the file and compares bytes with
+  TEXT (separate function, not inline); main() asserts the text is within
+  the 1..140 gate, reads MAKEFUN_OUTPUT_DIR (default "/output"), writes
+  entry.txt, then calls verify_written_bytes.
+- Verify with two runs to different output dirs and confirm the two
+  entry.txt files are byte-identical (sha256sum).
