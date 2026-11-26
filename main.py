@@ -23,14 +23,20 @@ TEXT = (
 
 
 def verify_written_bytes(path):
-    """Re-read the written file and compare its bytes with TEXT."""
+    """Re-read the written file and compare its bytes with TEXT.
+
+    The comparison is done on the SHA-256 digest of the landed bytes
+    and raises SystemExit on mismatch, so the check also holds under
+    `python -O` (where plain asserts are stripped).
+    """
+    import hashlib
+
     with open(path, "rb") as handle:
         written = handle.read()
-    if written != TEXT.encode("utf-8"):
-        raise AssertionError(
-            "entry.txt bytes do not match TEXT: wrote %r, expected %r"
-            % (written, TEXT.encode("utf-8"))
-        )
+    landed = hashlib.sha256(written).hexdigest()
+    expected = hashlib.sha256(TEXT.encode("utf-8")).hexdigest()
+    if landed != expected:
+        raise SystemExit("read-back verification failed: entry.txt digest mismatch")
     return True
 
 
